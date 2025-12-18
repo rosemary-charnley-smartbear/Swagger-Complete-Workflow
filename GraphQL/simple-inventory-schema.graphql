@@ -1,0 +1,74 @@
+
+"""
+Custom scalar for date-time values
+"""
+scalar DateTime
+
+"""
+Manufacturer information
+"""
+type Manufacturer {
+  name: String!
+  homePage: String
+  phone: String
+}
+
+"""
+Represents an item in the inventory
+"""
+type InventoryItem {
+  id: ID!
+  name: String!
+  releaseDate: DateTime!
+  manufacturer: Manufacturer!
+}
+
+"""
+Input type for manufacturer
+"""
+input ManufacturerInput {
+  name: String!
+  homePage: String
+  phone: String
+}
+
+"""
+Input type for creating an inventory item
+"""
+input InventoryItemInput {
+  id: ID!
+  name: String!
+  releaseDate: DateTime!
+  manufacturer: ManufacturerInput!
+}
+
+"""
+Root query type
+"""
+type Query {
+  """
+  Searches inventory with optional filtering and pagination
+  """
+  searchInventory(
+    searchString: String
+    skip: Int = 0
+    limit: Int = 50
+  ): [InventoryItem!]!
+}
+
+"""
+Root mutation type
+"""
+type Mutation {
+  """
+  Adds an inventory item to the system
+  """
+  addInventory(
+    item: InventoryItemInput!
+  ): InventoryItem
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+}

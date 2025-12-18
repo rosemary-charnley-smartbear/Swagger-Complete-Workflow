@@ -1,0 +1,185 @@
+asyncapi: 2.6.0
+info:
+  title: Simple Inventory Async API
+  version: 1.0.0
+  description: |
+    AsyncAPI version of the Simple Inventory API. Supports inventory search requests/responses and inventory item creation events.
+servers:
+  production:
+    url: inventory.example.com
+    protocol: kafka
+    description: Example Kafka broker
+channels:
+  inventory.search:
+    description: Channel for searching inventory
+    publish:
+      operationId: searchInventoryRequest
+      summary: Client requests an inventory search
+      message:
+        name: InventorySearchRequest
+        contentType: application/json
+        payload:
+          type: object
+          properties:
+            searchString:
+              type: string
+              description: Optional search string
+            skip:
+              type: integer
+              minimum: 0
+              default: 0
+            limit:
+              type: integer
+              minimum: 0
+              maximum: 50
+              default: 50
+    subscribe:
+      operationId: searchInventoryResponse
+      summary: Service responds with inventory search results
+      message:
+        name: InventorySearchResponse
+        contentType: application/json
+        payload:
+          type: array
+          items:
+            type: object
+            required:
+            - id
+            - name
+            - manufacturer
+            - releaseDate
+            properties:
+              id:
+                type: string
+                format: uuid
+                example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              name:
+                type: string
+                example: Widget Adapter
+              releaseDate:
+                type: string
+                format: date-time
+                example: 2016-08-29T09:12:33.001Z
+              manufacturer:
+                type: object
+                required:
+                - name
+                properties:
+                  name:
+                    type: string
+                    example: ACME Corporation
+                  homePage:
+                    type: string
+                    format: uri
+                    example: https://www.acme-corp.com
+                  phone:
+                    type: string
+                    example: 408-867-5309
+  inventory.item.created:
+    description: Event emitted when a new inventory item is added
+    publish:
+      operationId: inventoryItemCreated
+      summary: Inventory item created event
+      message:
+        name: InventoryItemCreated
+        contentType: application/json
+        payload:
+          type: object
+          required:
+          - id
+          - name
+          - manufacturer
+          - releaseDate
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+            name:
+              type: string
+              example: Widget Adapter
+            releaseDate:
+              type: string
+              format: date-time
+              example: 2016-08-29T09:12:33.001Z
+            manufacturer:
+              type: object
+              required:
+              - name
+              properties:
+                name:
+                  type: string
+                  example: ACME Corporation
+                homePage:
+                  type: string
+                  format: uri
+                  example: https://www.acme-corp.com
+                phone:
+                  type: string
+                  example: 408-867-5309
+components:
+  schemas:
+    InventorySearchRequest:
+      type: object
+      properties:
+        searchString:
+          type: string
+          description: Optional search string
+        skip:
+          type: integer
+          minimum: 0
+          default: 0
+        limit:
+          type: integer
+          minimum: 0
+          maximum: 50
+          default: 50
+    InventoryItem:
+      type: object
+      required:
+      - id
+      - name
+      - manufacturer
+      - releaseDate
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        name:
+          type: string
+          example: Widget Adapter
+        releaseDate:
+          type: string
+          format: date-time
+          example: 2016-08-29T09:12:33.001Z
+        manufacturer:
+          type: object
+          required:
+          - name
+          properties:
+            name:
+              type: string
+              example: ACME Corporation
+            homePage:
+              type: string
+              format: uri
+              example: https://www.acme-corp.com
+            phone:
+              type: string
+              example: 408-867-5309
+    Manufacturer:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          example: ACME Corporation
+        homePage:
+          type: string
+          format: uri
+          example: https://www.acme-corp.com
+        phone:
+          type: string
+          example: 408-867-5309
