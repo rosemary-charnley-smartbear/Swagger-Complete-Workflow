@@ -18,7 +18,7 @@ jobs:
       SWAGGERHUB_OWNER: Charnley-Test
       SWAGGERHUB_API_NAME: simple-api-3.0.x
       SWAGGERHUB_API_VERSION: 1.0.0
-      OPENAPI_FILE: simple-api-3.0.x-1.0.0.yaml
+      OPENAPI_FILE: OpenAPI/simple-api-3.0.x-1.0.0.yaml
 
     steps:
       - name: Checkout repository
