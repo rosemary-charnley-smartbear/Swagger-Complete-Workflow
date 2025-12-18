@@ -24,12 +24,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Validate OpenAPI file exists
+      - name: Detect changed OpenAPI file
+        id: detect
         run: |
-          if [ ! -f "$OPENAPI_FILE" ]; then
-            echo "OpenAPI file not found: $OPENAPI_FILE"
-            exit 1
+          FILE=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} \
+            | grep -E '\.(yaml|yml|json)$' | head -n 1)
+
+          if [ -z "$FILE" ]; then
+            echo "No OpenAPI spec changes detected"
+            exit 0
           fi
+
+          echo "OPENAPI_FILE=$FILE" >> $GITHUB_ENV
+          echo "Detected OpenAPI file: $FILE"
 
       - name: Push OpenAPI to SwaggerHub
         run: |
