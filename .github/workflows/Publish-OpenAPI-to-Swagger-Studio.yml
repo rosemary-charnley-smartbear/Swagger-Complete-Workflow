@@ -45,3 +45,9 @@ jobs:
             -H "Authorization: ${SWAGGER_STUDIO_API_KEY}" \
             -H "Content-Type: application/yaml" \
             --data-binary @"${OPENAPI_FILE}"
+
+      - name: Output SWagger Studio link
+        run: |
+          URL="https://app.swaggerhub.com/apis/${SWAGGERHUB_OWNER}/${SWAGGERHUB_API_NAME}/${SWAGGERHUB_API_VERSION}"
+          echo "Swagger Studio API available at:"
+          echo "$URL"
