@@ -38,7 +38,7 @@ jobs:
           echo "OPENAPI_FILE=$FILE" >> $GITHUB_ENV
           echo "Detected OpenAPI file: $FILE"
 
-      - name: Push OpenAPI to SwaggerHub
+      - name: Push OpenAPI to Swagger Studio
         run: |
           curl -X POST \
             "https://api.swaggerhub.com/apis/${SWAGGERHUB_OWNER}/${SWAGGERHUB_API_NAME}?version=${SWAGGERHUB_API_VERSION}" \
